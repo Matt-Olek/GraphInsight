@@ -1,54 +1,70 @@
-# React + TypeScript + Vite
+# GraphInsight
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple web application that visualizes hierarchical JSON data using force-directed graphs.
 
-Currently, two official plugins are available:
+## Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+GraphInsight takes hierarchical data in JSON format and transforms it into interactive, force-directed graph visualizations. It's designed to help users quickly understand complex data structures and relationships through visual representation.
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Paste JSON data directly into the web interface
+- Interactive force-directed graph visualization
+- Node sizing and coloring based on data properties
+- Detailed documentation for formatting requirements
+- Responsive design for desktop and mobile use
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
+## Live Demo
+
+Try GraphInsight at: [https://graph-insight-viz.vercel.app](https://graph-insight-viz.vercel.app)
+
+## Local Development
+
+This project is built with:
+- React
+- TypeScript
+- Vite
+- TailwindCSS
+- DaisyUI
+
+To run locally:
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+## Usage
+
+1. Paste your hierarchical JSON data into the input field
+2. Click "Visualize" to generate an interactive graph
+3. Explore the graph by dragging, zooming, and clicking on nodes
+4. Return to the input screen to modify your data or try new datasets
+
+## Example Data Format
+
+```json
+{
+  "name": "Root Node",
+  "children": [
+    {
+      "name": "Child 1",
+      "children": []
     },
-  },
-})
+    {
+      "name": "Child 2",
+      "value": 30,
+      "color": "#5D8AA8"
+    }
+  ]
+}
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Check the documentation page in the app for more details on formatting requirements.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## License
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+MIT
