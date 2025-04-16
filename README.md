@@ -16,7 +16,7 @@ GraphInsight takes hierarchical data in JSON format and transforms it into inter
 
 ## Live Demo
 
-Try GraphInsight at: [https://graph-insight-viz.vercel.app](https://graph-insight-viz.vercel.app)
+Try GraphInsight at: [https://matthieu-olekhnovitch.fr/GraphInsight/](https://matthieu-olekhnovitch.fr/GraphInsight/)
 
 ## Local Development
 
