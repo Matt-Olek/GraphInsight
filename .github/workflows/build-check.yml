@@ -2,9 +2,9 @@ name: Build Check
 
 on:
   push:
-    branches: [ "master", "development" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "master", "development" ]
+    branches: [ "main" ]
   workflow_call: {}
 
 jobs:

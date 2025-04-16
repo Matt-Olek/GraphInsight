@@ -28,7 +28,7 @@ function App() {
       {viewMode === 'input' && (
         <div className="container mx-auto p-4 h-full flex flex-col items-center justify-center">
           <header className="mb-12 text-center">
-            <h1 className="text-5xl font-bold mb-3 font-handwriting">GraphInsight</h1>
+            <h1 className="text-5xl font-bold mb-3 font-handwriting">💢 GraphInsight</h1>
             <p className="text-xl text-base-content/70">Visualize hierarchical graph data with force-directed graphs</p>
           </header>
           
