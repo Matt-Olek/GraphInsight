@@ -249,10 +249,12 @@ export default function ForceGraphDisplay({ graphData, onBack }: ForceGraphDispl
                     <ul className="list-disc pl-4">
                       {value.map((item, i) => (
                         <li key={i}>
-                          {Array.isArray(item) ? item.join(': ') : item}
+                          {typeof item === 'object' ? JSON.stringify(item) : item}
                         </li>
                       ))}
                     </ul>
+                  ) : typeof value === 'object' ? (
+                    <div>{JSON.stringify(value, null, 2)}</div>
                   ) : (
                     <div>{value}</div>
                   )}
