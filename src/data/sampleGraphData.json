@@ -1,0 +1,486 @@
+{
+    "nodes": [
+        {
+            "id": 0,
+            "semantic_summary": "Computer Science",
+            "entities": [
+                [
+                    "Computer Science",
+                    "Study of computation and information processing"
+                ],
+                [
+                    "Algorithms",
+                    "Step-by-step procedures for calculations"
+                ],
+                [
+                    "Data Structures",
+                    "Organized storage of data"
+                ]
+            ]
+        },
+        {
+            "id": 1,
+            "semantic_summary": "Theoretical Computer Science",
+            "entities": [
+                [
+                    "Theory of Computation",
+                    "Study of computation and computability"
+                ],
+                [
+                    "Automata Theory",
+                    "Study of abstract machines"
+                ],
+                [
+                    "Computational Complexity",
+                    "Study of resource requirements"
+                ]
+            ]
+        },
+        {
+            "id": 2,
+            "semantic_summary": "Artificial Intelligence",
+            "entities": [
+                [
+                    "AI",
+                    "Simulation of human intelligence in machines"
+                ],
+                [
+                    "Machine Learning",
+                    "Systems that learn from data"
+                ],
+                [
+                    "Neural Networks",
+                    "Computing systems inspired by biological neural networks"
+                ]
+            ]
+        },
+        {
+            "id": 3,
+            "semantic_summary": "Machine Learning",
+            "entities": [
+                [
+                    "Supervised Learning",
+                    "Learning from labeled data"
+                ],
+                [
+                    "Unsupervised Learning",
+                    "Learning from unlabeled data"
+                ],
+                [
+                    "Reinforcement Learning",
+                    "Learning through interaction"
+                ]
+            ]
+        },
+        {
+            "id": 4,
+            "semantic_summary": "Deep Learning",
+            "entities": [
+                [
+                    "Convolutional Networks",
+                    "Neural networks for image processing"
+                ],
+                [
+                    "Recurrent Networks",
+                    "Neural networks for sequential data"
+                ],
+                [
+                    "Transformers",
+                    "Attention-based neural networks"
+                ]
+            ]
+        },
+        {
+            "id": 5,
+            "semantic_summary": "Software Engineering",
+            "entities": [
+                [
+                    "Software Development",
+                    "Process of creating software"
+                ],
+                [
+                    "DevOps",
+                    "Combination of development and operations"
+                ],
+                [
+                    "Agile Methodology",
+                    "Iterative approach to project management"
+                ]
+            ]
+        },
+        {
+            "id": 6,
+            "semantic_summary": "Web Development",
+            "entities": [
+                [
+                    "Frontend",
+                    "User interface and client-side logic"
+                ],
+                [
+                    "Backend",
+                    "Server-side logic and database management"
+                ],
+                [
+                    "Full Stack",
+                    "Combination of frontend and backend development"
+                ]
+            ]
+        },
+        {
+            "id": 7,
+            "semantic_summary": "Frontend Development",
+            "entities": [
+                [
+                    "React",
+                    "JavaScript library for building UIs"
+                ],
+                [
+                    "Vue",
+                    "Progressive JavaScript framework"
+                ],
+                [
+                    "Angular",
+                    "TypeScript-based web framework"
+                ]
+            ]
+        },
+        {
+            "id": 8,
+            "semantic_summary": "Backend Development",
+            "entities": [
+                [
+                    "Node.js",
+                    "JavaScript runtime for server-side"
+                ],
+                [
+                    "Django",
+                    "Python web framework"
+                ],
+                [
+                    "Spring Boot",
+                    "Java framework for web applications"
+                ]
+            ]
+        },
+        {
+            "id": 9,
+            "semantic_summary": "Data Science",
+            "entities": [
+                [
+                    "Data Analysis",
+                    "Process of inspecting and modeling data"
+                ],
+                [
+                    "Statistics",
+                    "Collection, analysis, and interpretation of data"
+                ],
+                [
+                    "Big Data",
+                    "Large and complex data sets"
+                ]
+            ]
+        },
+        {
+            "id": 10,
+            "semantic_summary": "Data Analysis",
+            "entities": [
+                [
+                    "Exploratory Analysis",
+                    "Initial investigation of data"
+                ],
+                [
+                    "Statistical Modeling",
+                    "Creating mathematical models"
+                ],
+                [
+                    "Data Visualization",
+                    "Graphical representation of data"
+                ]
+            ]
+        },
+        {
+            "id": 11,
+            "semantic_summary": "Big Data",
+            "entities": [
+                [
+                    "Hadoop",
+                    "Framework for distributed processing"
+                ],
+                [
+                    "Spark",
+                    "Unified analytics engine"
+                ],
+                [
+                    "Data Lakes",
+                    "Centralized repository for raw data"
+                ]
+            ]
+        },
+        {
+            "id": 12,
+            "semantic_summary": "Cybersecurity",
+            "entities": [
+                [
+                    "Network Security",
+                    "Protection of network infrastructure"
+                ],
+                [
+                    "Cryptography",
+                    "Practice of secure communication"
+                ],
+                [
+                    "Ethical Hacking",
+                    "Authorized testing of security systems"
+                ]
+            ]
+        },
+        {
+            "id": 13,
+            "semantic_summary": "Network Security",
+            "entities": [
+                [
+                    "Firewalls",
+                    "Network security systems"
+                ],
+                [
+                    "Intrusion Detection",
+                    "Monitoring for malicious activity"
+                ],
+                [
+                    "VPN",
+                    "Virtual Private Networks"
+                ]
+            ]
+        },
+        {
+            "id": 14,
+            "semantic_summary": "Cryptography",
+            "entities": [
+                [
+                    "Symmetric Encryption",
+                    "Single key encryption"
+                ],
+                [
+                    "Asymmetric Encryption",
+                    "Public key cryptography"
+                ],
+                [
+                    "Hash Functions",
+                    "One-way mathematical functions"
+                ]
+            ]
+        },
+        {
+            "id": 15,
+            "semantic_summary": "Cloud Computing",
+            "entities": [
+                [
+                    "AWS",
+                    "Amazon Web Services cloud platform"
+                ],
+                [
+                    "Azure",
+                    "Microsoft's cloud computing platform"
+                ],
+                [
+                    "Google Cloud",
+                    "Google's cloud computing services"
+                ]
+            ]
+        },
+        {
+            "id": 16,
+            "semantic_summary": "Database Systems",
+            "entities": [
+                [
+                    "SQL",
+                    "Structured Query Language"
+                ],
+                [
+                    "NoSQL",
+                    "Non-relational databases"
+                ],
+                [
+                    "Database Design",
+                    "Process of creating database schemas"
+                ]
+            ]
+        },
+        {
+            "id": 17,
+            "semantic_summary": "SQL Databases",
+            "entities": [
+                [
+                    "MySQL",
+                    "Open-source relational database"
+                ],
+                [
+                    "PostgreSQL",
+                    "Advanced open-source database"
+                ],
+                [
+                    "Oracle",
+                    "Enterprise database system"
+                ]
+            ]
+        },
+        {
+            "id": 18,
+            "semantic_summary": "NoSQL Databases",
+            "entities": [
+                [
+                    "MongoDB",
+                    "Document-oriented database"
+                ],
+                [
+                    "Redis",
+                    "In-memory data structure store"
+                ],
+                [
+                    "Cassandra",
+                    "Distributed NoSQL database"
+                ]
+            ]
+        },
+        {
+            "id": 19,
+            "semantic_summary": "Mobile Development",
+            "entities": [
+                [
+                    "iOS Development",
+                    "Development for Apple's mobile platform"
+                ],
+                [
+                    "Android Development",
+                    "Development for Google's mobile platform"
+                ],
+                [
+                    "Cross-Platform",
+                    "Development for multiple platforms"
+                ]
+            ]
+        },
+        {
+            "id": 20,
+            "semantic_summary": "iOS Development",
+            "entities": [
+                [
+                    "Swift",
+                    "Apple's programming language"
+                ],
+                [
+                    "UIKit",
+                    "iOS user interface framework"
+                ],
+                [
+                    "SwiftUI",
+                    "Declarative UI framework"
+                ]
+            ]
+        },
+        {
+            "id": 21,
+            "semantic_summary": "Android Development",
+            "entities": [
+                [
+                    "Kotlin",
+                    "Modern Android language"
+                ],
+                [
+                    "Jetpack",
+                    "Android development components"
+                ],
+                [
+                    "Material Design",
+                    "Google's design system"
+                ]
+            ]
+        }
+    ],
+    "edges": [
+        {
+            "source_id": 0,
+            "target_id": 1
+        },
+        {
+            "source_id": 0,
+            "target_id": 2
+        },
+        {
+            "source_id": 0,
+            "target_id": 5
+        },
+        {
+            "source_id": 0,
+            "target_id": 9
+        },
+        {
+            "source_id": 0,
+            "target_id": 12
+        },
+        {
+            "source_id": 2,
+            "target_id": 3
+        },
+        {
+            "source_id": 3,
+            "target_id": 4
+        },
+        {
+            "source_id": 5,
+            "target_id": 6
+        },
+        {
+            "source_id": 5,
+            "target_id": 15
+        },
+        {
+            "source_id": 5,
+            "target_id": 16
+        },
+        {
+            "source_id": 5,
+            "target_id": 19
+        },
+        {
+            "source_id": 6,
+            "target_id": 7
+        },
+        {
+            "source_id": 6,
+            "target_id": 8
+        },
+        {
+            "source_id": 9,
+            "target_id": 10
+        },
+        {
+            "source_id": 9,
+            "target_id": 11
+        },
+        {
+            "source_id": 12,
+            "target_id": 13
+        },
+        {
+            "source_id": 12,
+            "target_id": 14
+        },
+        {
+            "source_id": 16,
+            "target_id": 17
+        },
+        {
+            "source_id": 16,
+            "target_id": 18
+        },
+        {
+            "source_id": 19,
+            "target_id": 20
+        },
+        {
+            "source_id": 19,
+            "target_id": 21
+        }
+    ]
+}

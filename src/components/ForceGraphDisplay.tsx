@@ -1,176 +1,197 @@
-import { useRef, useEffect, useState, useCallback } from 'react';
-import ForceGraph2D from 'react-force-graph-2d';
-import { ForceGraphData, ForceGraphNode } from '../types/Graph';
+import { useRef, useEffect, useState } from 'react';
+import { Network, Data, Edge, Node, Options } from 'vis-network';
+import { DataSet } from 'vis-data';
+import { GraphData, GraphNode } from '../types/Graph';
+import GraphControls, { GraphSettings } from './GraphControls';
+import 'vis-network/styles/vis-network.css';
 
 interface ForceGraphDisplayProps {
-  graphData: ForceGraphData;
+  graphData: GraphData;
   onBack: () => void;
 }
 
-interface NodeWithPosition extends ForceGraphNode {
-  x?: number;
-  y?: number;
-  color?: string;
-}
-
-
 export default function ForceGraphDisplay({ graphData, onBack }: ForceGraphDisplayProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const graphRef = useRef<any>(null);
-  const [highlightedNode, setHighlightedNode] = useState<string | null>(null);
-  const [highlightLinks, setHighlightLinks] = useState<Set<string>>(new Set());
-  const [showMetadata, setShowMetadata] = useState(false);
-  
-  const handleNodeHover = useCallback((node: NodeWithPosition | null) => {
-    if (node) {
-      setHighlightedNode(node.id);
-      
-      // Find connected links
-      const connectedLinks = new Set<string>();
-      graphData.links.forEach(link => {
-        if (link.source === node.id || link.target === node.id) {
-          connectedLinks.add(`${link.source}-${link.target}`);
-        }
-      });
-      setHighlightLinks(connectedLinks);
-    } else {
-      setHighlightedNode(null);
-      setHighlightLinks(new Set());
-    }
-  }, [graphData.links]);
-  
-  const handleZoomIn = () => {
-    if (graphRef.current) {
-      const currentZoom = graphRef.current.zoom();
-      graphRef.current.zoom(currentZoom * 1.5, 400); // duration in ms
-    }
-  };
-  
-  const handleZoomOut = () => {
-    if (graphRef.current) {
-      const currentZoom = graphRef.current.zoom();
-      graphRef.current.zoom(currentZoom / 1.5, 400); // duration in ms
-    }
-  };
-  
-  const handleResetZoom = () => {
-    if (graphRef.current) {
-      graphRef.current.zoomToFit(400, 50); // duration, padding
-    }
-  };
-  
+  const networkRef = useRef<Network | null>(null);
+  const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
+  const [settings, setSettings] = useState<GraphSettings>({
+    repulsionForce: 200,
+    linkDistance: 200
+  });
+  const [showSettings, setShowSettings] = useState(false);
+
   useEffect(() => {
-    // Adjust the size on resize
-    const handleResize = () => {
-      if (containerRef.current && graphRef.current) {
-        graphRef.current.width(containerRef.current.offsetWidth);
-        graphRef.current.height(containerRef.current.offsetHeight);
+    if (!containerRef.current) return;
+
+    // Get the primary color from CSS variables
+    const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--color-success').trim();
+
+    // Create nodes array for vis.js
+    const nodes = new DataSet<Node>(
+      graphData.nodes.map(node => ({
+        id: node.id,
+        label: node.semantic_summary,
+        title: node.semantic_summary,
+        color: {
+          background: primaryColor,
+          border: primaryColor,
+          highlight: {
+            background: primaryColor,
+            border: primaryColor
+          }
+        },
+        value: 20,
+        shape: 'dot',
+        size: 20
+      }))
+    );
+
+    // Create edges array for vis.js
+    const edges = new DataSet<Edge>(
+      graphData.edges.map(edge => ({
+        from: edge.source_id,
+        to: edge.target_id,
+        color: {
+          color: 'rgba(204, 204, 204, 0.6)',
+          highlight: 'rgba(153, 153, 153, 0.6)'
+        },
+        width: 1.5
+      }))
+    );
+
+    // Create the network
+    const data: Data = {
+      nodes,
+      edges
+    };
+
+    const options: Options = {
+      nodes: {
+        font: {
+          size: 14,
+          color: '#000000'
+        }
+      },
+      edges: {
+        smooth: {
+          enabled: true,
+          type: 'continuous',
+          roundness: 0.7
+        },
+        arrows: {
+          to: {
+            enabled: true,
+            scaleFactor: 0.5
+          }
+        }
+      },
+      layout: {
+        hierarchical: {
+          enabled: true,
+          direction: 'UD',
+          sortMethod: 'directed',
+          shakeTowards: 'roots',
+          levelSeparation: settings.linkDistance,
+          nodeSpacing: settings.repulsionForce / 2,
+          treeSpacing: settings.repulsionForce,
+          blockShifting: true,
+          edgeMinimization: true,
+          parentCentralization: true
+        }
+      },
+      physics: {
+        hierarchicalRepulsion: {
+          nodeDistance: settings.repulsionForce
+        },
+        stabilization: {
+          iterations: 100
+        }
+      },
+      interaction: {
+        hover: false,
+        tooltipDelay: 200
       }
     };
-    
-    window.addEventListener('resize', handleResize);
-    
-    // Initial zoom to fit
-    setTimeout(() => {
-      if (graphRef.current) {
-        graphRef.current.zoomToFit(400);
+
+    networkRef.current = new Network(containerRef.current, data, options);
+
+    // Handle node click
+    networkRef.current.on('click', (params) => {
+      if (params.nodes.length > 0) {
+        const nodeId = params.nodes[0];
+        const node = graphData.nodes.find(n => n.id === nodeId);
+        if (node) {
+          setSelectedNode(node);
+        }
       }
-    }, 500);
-    
+    });
+
+    // Handle window resize
+    const handleResize = () => {
+      if (containerRef.current && networkRef.current) {
+        networkRef.current.redraw();
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+
     return () => {
       window.removeEventListener('resize', handleResize);
+      if (networkRef.current) {
+        networkRef.current.destroy();
+      }
     };
-  }, [graphData]);
-  
-  const getNodeColor = (node: NodeWithPosition) => {
-    if (highlightedNode && node.id === highlightedNode) {
-      return '#E91E63'; // Highlight color for selected node
-    }
-    return node.color as string;
-  };
-  
-  const getLinkColor = (link: any) => {
-    const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
-    const targetId = typeof link.target === 'object' ? link.target.id : link.target;
-    
-    if (highlightLinks.has(`${sourceId}-${targetId}`) || 
-        highlightLinks.has(`${targetId}-${sourceId}`)) {
-      return '#E91E63'; // Highlight color for connected links
-    }
-    return '#aaaaaa';
+  }, [graphData, settings]);
+
+  const handleSettingsChange = (newSettings: GraphSettings) => {
+    setSettings(newSettings);
   };
 
-  const isLinkHighlighted = (link: any) => {
-    const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
-    const targetId = typeof link.target === 'object' ? link.target.id : link.target;
-    
-    return highlightLinks.has(`${sourceId}-${targetId}`) || 
-           highlightLinks.has(`${targetId}-${sourceId}`);
+  const handleZoomIn = () => {
+    if (networkRef.current) {
+      const currentScale = networkRef.current.getScale();
+      networkRef.current.moveTo({
+        scale: currentScale * 1.5,
+        animation: {
+          duration: 400,
+          easingFunction: 'easeInOutQuad'
+        }
+      });
+    }
   };
-  
+
+  const handleZoomOut = () => {
+    if (networkRef.current) {
+      const currentScale = networkRef.current.getScale();
+      networkRef.current.moveTo({
+        scale: currentScale / 1.5,
+        animation: {
+          duration: 400,
+          easingFunction: 'easeInOutQuad'
+        }
+      });
+    }
+  };
+
+  const handleResetZoom = () => {
+    if (networkRef.current) {
+      networkRef.current.fit({
+        animation: {
+          duration: 400,
+          easingFunction: 'easeInOutQuad'
+        }
+      });
+    }
+  };
+
   return (
-    <div className="relative h-screen w-full">
-      <div 
-        ref={containerRef} 
+    <div className="relative h-full w-full bg-base-100">
+      <div
+        ref={containerRef}
         className="w-full h-full"
-      >
-        <ForceGraph2D
-          ref={graphRef}
-          graphData={graphData}
-          nodeLabel="name"
-          nodeAutoColorBy="name"
-          nodeVal={(node) => node.val || 1}
-          linkWidth={(link) => isLinkHighlighted(link) ? 2.5 : 1.5}
-          linkColor={getLinkColor}
-          linkDirectionalParticles={(link) => isLinkHighlighted(link) ? 5 : 2}
-          linkDirectionalParticleSpeed={0.005}
-          onNodeHover={handleNodeHover}
-          nodeCanvasObject={(node: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
-            const label = node.name;
-            const isHighlighted = highlightedNode === node.id;
-            const fontSize = isHighlighted ? 16/globalScale : 12/globalScale;
-            ctx.font = `${fontSize}px Sans-Serif`;
-            const textWidth = ctx.measureText(label).width;
-            const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2);
-            
-            // Node circle
-            ctx.beginPath();
-            const nodeSize = isHighlighted ? 8 : 5;
-            ctx.arc(node.x, node.y, nodeSize, 0, 2 * Math.PI, false);
-            ctx.fillStyle = getNodeColor(node);
-            ctx.fill();
-            
-            if (isHighlighted) {
-              // Add a border for highlighted nodes
-              ctx.strokeStyle = '#000';
-              ctx.lineWidth = 0.5;
-              ctx.stroke();
-            }
-            
-            // Text background
-            ctx.fillStyle = isHighlighted ? 'rgba(255, 235, 245, 0.9)' : 'rgba(255, 255, 255, 0.8)';
-            ctx.fillRect(
-              node.x - bckgDimensions[0] / 2,
-              node.y - bckgDimensions[1] / 2,
-              bckgDimensions[0],
-              bckgDimensions[1]
-            );
-            
-            // Text
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillStyle = isHighlighted ? '#E91E63' : 'black';
-            ctx.fillText(label, node.x, node.y);
-          }}
-          cooldownTicks={100}
-          onEngineStop={() => {
-            // Called when the simulation finishes its initial cooldown phase
-          }}
-        />
-      </div>
-      
-      {/* Top fixed control bar */}
-      <div className="fixed top-0 left-0 right-0 bg-base-300/80 backdrop-blur-sm p-4 flex justify-between items-center z-10">
+      />
+
+      <div className="fixed top-0 left-0 right-0 backdrop-blur-sm p-4 flex justify-between items-center z-10 border-b border-gray-200">
         <div className="flex items-center gap-2">
           <button onClick={onBack} className="btn btn-ghost btn-sm">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -178,35 +199,66 @@ export default function ForceGraphDisplay({ graphData, onBack }: ForceGraphDispl
             </svg>
             Back
           </button>
-          <h2 className="text-xl font-bold">{graphData.nodes[0]?.name || 'Graph'} Visualization</h2>
+          <h2 className="text-xl font-bold">Graph Visualization</h2>
         </div>
-        
-        <div className="flex gap-2">
-          <button onClick={() => setShowMetadata(!showMetadata)} className="btn btn-ghost btn-sm">
-            {showMetadata ? 'Hide Metadata' : 'Show Metadata'}
-          </button>
-          <div className="btn-group btn-group-horizontal">
-            <button onClick={handleZoomIn} className="btn btn-sm btn-outline">+</button>
-            <button onClick={handleResetZoom} className="btn btn-sm btn-outline">Reset</button>
-            <button onClick={handleZoomOut} className="btn btn-sm btn-outline">-</button>
-          </div>
-        </div>
+
+        <button
+          onClick={() => setShowSettings(!showSettings)}
+          className="btn btn-sm btn-outline"
+        >
+          {showSettings ? 'Hide Settings' : 'Show Settings'}
+        </button>
       </div>
-      
-      {/* Metadata slide-out panel */}
-      {showMetadata && (
-        <div className="fixed right-0 top-16 bottom-0 w-80 bg-base-100 shadow-lg p-4 overflow-auto z-10 animate-slide-in-right">
-          <h3 className="text-lg font-bold mb-2">Graph Metadata</h3>
-          <div className="divider"></div>
-          <pre className="text-xs overflow-auto bg-base-200 p-2 rounded-box">
-            {JSON.stringify(graphData.nodes[0]?.metadata || {}, null, 2)}
-          </pre>
-          
-          <h3 className="text-lg font-bold mt-4 mb-2">Node Count</h3>
-          <div className="stat-value text-primary">{graphData.nodes.length}</div>
-          
-          <h3 className="text-lg font-bold mt-4 mb-2">Link Count</h3>
-          <div className="stat-value text-secondary">{graphData.links.length}</div>
+
+      {/* Graph Controls */}
+      {showSettings && (
+        <div className="fixed top-20 right-4 z-20">
+          <GraphControls
+            onSettingsChange={handleSettingsChange}
+            onZoomIn={handleZoomIn}
+            onZoomOut={handleZoomOut}
+            onResetZoom={handleResetZoom}
+          />
+        </div>
+      )}
+
+      {/* Node Details Modal */}
+      {selectedNode && (
+        <div className="fixed bottom-4 right-4 w-96 bg-white shadow-xl rounded-lg p-4 z-20 animate-slide-in-up border border-gray-200">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-bold">Node Details</h3>
+            <button
+              onClick={() => setSelectedNode(null)}
+              className="btn btn-ghost btn-sm"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <div className="space-y-2">
+            <div className="font-semibold">Summary:</div>
+            <div className="text-sm">{selectedNode.semantic_summary}</div>
+            <div className="divider"></div>
+            {Object.entries(selectedNode)
+              .filter(([key]) => !['id', 'semantic_summary'].includes(key))
+              .map(([key, value]) => (
+                <div key={key} className="text-sm">
+                  <div className="font-medium">{key}:</div>
+                  {Array.isArray(value) ? (
+                    <ul className="list-disc pl-4">
+                      {value.map((item, i) => (
+                        <li key={i}>
+                          {Array.isArray(item) ? item.join(': ') : item}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <div>{value}</div>
+                  )}
+                </div>
+              ))}
+          </div>
         </div>
       )}
     </div>

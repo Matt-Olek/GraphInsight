@@ -1,8 +1,19 @@
 export interface GraphNode {
-  name: string;
-  embedding: number[] | null;
-  metadata: Record<string, any>;
-  children: GraphNode[];
+  id: number;
+  semantic_summary: string;
+  [key: string]: any;
+}
+
+export interface GraphEdge {
+  source_id: number;
+  target_id: number;
+  [key: string]: any;
+}
+
+export interface GraphData {
+  nodes: GraphNode[];
+  edges: GraphEdge[];
+  [key: string]: any;
 }
 
 export interface ForceGraphNode {
