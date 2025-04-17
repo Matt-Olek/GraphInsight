@@ -1,42 +1,5 @@
-import { GraphNode, ForceGraphData, ForceGraphNode, ForceGraphLink } from '../types/Graph';
-import { GraphData, GraphEdge } from '../types/Graph';
+import { GraphNode, GraphData } from '../types/Graph';
 
-export function hierarchyToForceGraph(rootNode: GraphNode): ForceGraphData {
-  const nodes: ForceGraphNode[] = [];
-  const links: ForceGraphLink[] = [];
-
-  function processNode(node: GraphNode, parentId?: string): string {
-    const id = `${node.name}_${nodes.length}`; // Generate unique ID
-
-    // Add node
-    nodes.push({
-      id,
-      name: node.name,
-      embedding: node.embedding || undefined,
-      metadata: node.metadata,
-      val: node.children.length + 1 // Size based on number of children
-    });
-
-    // Add link to parent if it exists
-    if (parentId) {
-      links.push({
-        source: parentId,
-        target: id
-      });
-    }
-
-    // Process children
-    for (const child of node.children) {
-      processNode(child, id);
-    }
-
-    return id;
-  }
-
-  processNode(rootNode);
-
-  return { nodes, links };
-}
 
 export function validateGraphData(data: any): data is GraphData {
   // Check if data is an object
